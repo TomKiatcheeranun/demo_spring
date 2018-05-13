@@ -4,7 +4,7 @@
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-build</artifactId>
 	<version>1.4.0.BUILD-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 	<name>Spring Boot Build</name>
 	<description>Spring Boot Build</description>
 	<url>http://projects.spring.io/spring-boot/</url>
