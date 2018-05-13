@@ -1,4 +1,5 @@
 #!/bin/bash
+
 export LANG="en_US.UTF-8"
 APP_NAME=$(cat /image_info/app_name)
 APP_VERSION=$(cat /image_info/app_version)

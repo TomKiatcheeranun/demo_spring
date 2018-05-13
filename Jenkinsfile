@@ -7,7 +7,8 @@ pipeline {
     environment{
         sonarqubeURL="http://localhost:9000"
         newVersion="1.0.0-${env.BUILD_NUMBER}"
-        appName="spring-boot-build"
+        appName="log4j2-demo"
+        targetNamespace="default"
     }
     stages {
         stage ('Initialize') {
@@ -18,10 +19,13 @@ pipeline {
                 '''
                 sh "sed -i s/#APP_NAME#/${appName}/g Dockerfile"
                 sh "sed -i s/#APP_VERSION#/${newVersion}/g Dockerfile"
+                sh "sed -i s/#APP_NAME#/${appName}/g deployment.yaml"
+                sh "sed -i s/#APP_VERSION#/${newVersion}/g deployment.yaml"
+                sh "sed -i s/#APP_NAME#/${appName}/g service.yaml"
             }
         }
 
-        stage ('Build') {
+        stage ('Build with Sonarqube') {
             steps {
                 withSonarQubeEnv('sonarqube') {
                     sh "mvn versions:set -DnewVersion=${newVersion}"
@@ -62,7 +66,8 @@ pipeline {
 
         stage ('Deploy Container') {
             steps {
-                echo 'Deploy Successfully' 
+                sh "kubectl apply -f ${WORKSPACE}/deployment.yaml -n ${targetNamespace}"
+                sh "kubectl apply -f ${WORKSPACE}/service.yaml -n ${targetNamespace}"
             }
         }
 
