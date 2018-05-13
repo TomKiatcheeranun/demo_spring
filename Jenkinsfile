@@ -5,7 +5,7 @@ pipeline {
         jdk 'jdk8'
     }
     environment{
-        sonarqubeURL="http://13.251.19.114:9000"
+        sonarqubeURL="http://localhost:9000"
         newVersion="1.0.0-${env.BUILD_NUMBER}"
         appName="spring-boot-build"
     }
@@ -17,7 +17,7 @@ pipeline {
                     echo "M2_HOME = ${M2_HOME}"
                 '''
                 sh "sed -i s/#APP_NAME#/${appName}/g Dockerfile"
-                sh "cat Dockerfile"
+                sh "sed -i s/#APP_VERSION#/${newVersion}/g Dockerfile"
             }
         }
 
@@ -36,7 +36,39 @@ pipeline {
                     "-Dsonar.test.inclusions=**/*Test*/** "+
                     "-Dsonar.exclusions=**/*Test*/** "+
                     "-Dsonar.java.binaries=target/classes"
+                    sleep 10
                 }
+            }
+        }
+
+        stage ('Quality Gate') {
+            steps {
+              timeout(time: 5, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+              }
+            }
+        }
+
+        stage ('Build Image And Public to Docker Hub') {
+            steps {
+                sh "cp ${WORKSPACE}/target/${appName}-${newVersion}.jar ."
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-selfieblue', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUsername')]) {
+                    sh '''docker login -u ${dockerhubUsername} -p ${dockerhubPassword}'''
+                    sh '''docker build -t selfieblue/${appName}:${newVersion} .'''
+                    sh '''docker push selfieblue/${appName}:${newVersion}'''
+                }
+            }
+        }
+
+        stage ('Deploy Container') {
+            steps {
+                echo 'Deploy Successfully' 
+            }
+        }
+
+        stage ('Running Robot Framework') {
+            steps {
+                echo 'Deploy Successfully' 
             }
         }
     }
