@@ -16,7 +16,7 @@ pipeline {
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
                 '''
-                sh "sed -i \"s~'#APP_NAME#'~${appName}~g\" Dockerfile"
+                sh "sed -i s/#APP_NAME#/${appName}/g Dockerfile"
                 sh "cat Dockerfile"
             }
         }
