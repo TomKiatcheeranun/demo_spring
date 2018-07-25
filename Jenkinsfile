@@ -38,9 +38,7 @@ pipeline {
             steps {
                 sh '''
                     ls ${WORKSPACE}/target/
-                    cp ${WORKSPACE}/target/${appName}-0.0.1-SNAPSHOT.jar ./${appName}-${newVersion}.jar
-                    ls ${WORKSPACE}/target/
-                    cp ${WORKSPACE}/target/${appName}-${newVersion}.jar .
+                    cp ${WORKSPACE}/target/${appName}-0.0.1-SNAPSHOT.jar ${WORKSPACE}/target/${appName}-${newVersion}.jar
                 '''
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-selfieblue', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUsername')]) {
                     sh '''docker login -u ${dockerhubUsername} -p ${dockerhubPassword}'''
