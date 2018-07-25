@@ -42,8 +42,8 @@ pipeline {
                 '''
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-selfieblue', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUsername')]) {
                     sh '''docker login -u ${dockerhubUsername} -p ${dockerhubPassword}'''
-                    sh '''docker build -t selfieblue/${appName}:${newVersion} .'''
-                    sh '''docker push selfieblue/${appName}:${newVersion}'''
+                    sh '''docker build -t birdyman/${appName}:${newVersion} .'''
+                    sh '''docker push birdyman/${appName}:${newVersion}'''
                 }
             }
         }
