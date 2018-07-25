@@ -34,7 +34,7 @@ pipeline {
             }
         }
 
-        stage ('Build Image And Public to Docker Hub') {
+        /*stage ('Build Image And Public to Docker Hub') {
             steps {
                 sh '''
                     ls ${WORKSPACE}/target/
@@ -45,6 +45,16 @@ pipeline {
                     sh '''docker build -t birdyman/${appName}:${newVersion} .'''
                     sh '''docker push birdyman/${appName}:${newVersion}'''
                 }
+            }
+        }*/
+
+        stage('Build image') {
+            app = docker.build("birdyman/${appName}:${newVersion}")
+        }
+        stage('Push image') {
+            docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                app.push("${env.BUILD_NUMBER}")
+                app.push("latest")
             }
         }
 
