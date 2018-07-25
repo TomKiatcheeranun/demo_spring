@@ -34,21 +34,21 @@ pipeline {
             }
         }
 
-        /*stage ('Build Image And Public to Docker Hub') {
+        stage ('Build Image And Public to Docker Hub') {
             steps {
                 sh '''
                     ls ${WORKSPACE}/target/
                     cp ${WORKSPACE}/target/${appName}-0.0.1-SNAPSHOT.jar ${WORKSPACE}/target/${appName}-${newVersion}.jar
                 '''
-                withCredentials([usernamePassword(credentialsId: 'birdyman', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUsername')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-selfieblue', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUsername')]) {
                     sh '''docker login -u ${dockerhubUsername} -p ${dockerhubPassword}'''
-                    sh '''docker build -t birdyman/${appName}:${newVersion} .'''
-                    sh '''docker push birdyman/${appName}:${newVersion}'''
+                    sh '''docker build -t birdy/${appName}:${newVersion} .'''
+                    sh '''docker push birdy/${appName}:${newVersion}'''
                 }
             }
-        }*/
+        }
 
-        stage ('Build Image And Public to Docker Hub') {
+        /*stage ('Build Image And Public to Docker Hub') {
             steps {
                 sh '''
                     ls ${WORKSPACE}/target/
@@ -58,7 +58,7 @@ pipeline {
                     docker push birdy/${appName}:${newVersion}
                 '''
             }
-        }
+        }*/
 
         stage ('Deploy Container') {
             steps {
