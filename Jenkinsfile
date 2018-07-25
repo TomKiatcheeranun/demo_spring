@@ -53,8 +53,9 @@ pipeline {
                 sh '''
                     ls ${WORKSPACE}/target/
                     cp ${WORKSPACE}/target/${appName}-0.0.1-SNAPSHOT.jar ${WORKSPACE}/target/${appName}-${newVersion}.jar
-                    docker build -t birdyman/${appName}:${newVersion} .
-                    docker push birdyman/${appName}:${newVersion}
+                    docker login -u birdyman -p Bird1Bird
+                    docker build -t birdy/${appName}:${newVersion} .
+                    docker push birdy/${appName}:${newVersion}
                 '''
             }
         }
