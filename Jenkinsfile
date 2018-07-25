@@ -40,7 +40,7 @@ pipeline {
                     ls ${WORKSPACE}/target/
                     cp ${WORKSPACE}/target/${appName}-0.0.1-SNAPSHOT.jar ${WORKSPACE}/target/${appName}-${newVersion}.jar
                 '''
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-birdyman', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUsername')]) {
+                withCredentials([usernamePassword(credentialsId: 'birdyman', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUsername')]) {
                     sh '''docker login -u ${dockerhubUsername} -p ${dockerhubPassword}'''
                     sh '''docker build -t birdyman/${appName}:${newVersion} .'''
                     sh '''docker push birdyman/${appName}:${newVersion}'''
