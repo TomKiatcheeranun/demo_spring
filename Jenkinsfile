@@ -25,10 +25,10 @@ pipeline {
             }
         }
 
-        stage ('Build with Sonarqube') {
+        stage ('Build') {
             steps {
                 sh '''
-                    echo "Build with Sonarqube"
+                    echo "Build"
                     mvn package
                 '''
             }
@@ -36,7 +36,11 @@ pipeline {
 
         stage ('Build Image And Public to Docker Hub') {
             steps {
-                sh "cp ${WORKSPACE}/target/${appName}-${newVersion}.jar ."
+                sh '''
+                    ls ${WORKSPACE}
+                    ls ${WORKSPACE}/target/
+                    cp ${WORKSPACE}/target/${appName}-${newVersion}.jar .
+                '''
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-selfieblue', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUsername')]) {
                     sh '''docker login -u ${dockerhubUsername} -p ${dockerhubPassword}'''
                     sh '''docker build -t selfieblue/${appName}:${newVersion} .'''
