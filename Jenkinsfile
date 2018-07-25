@@ -27,6 +27,10 @@ pipeline {
 
         stage ('Build with Sonarqube') {
             steps {
+                sh '''
+                    echo "Build with Sonarqube"
+                '''
+                /*
                 withSonarQubeEnv('sonarqube') {
                     sh "mvn versions:set -DnewVersion=${newVersion}"
                     sh "mvn clean package sonar:sonar " +
@@ -42,14 +46,18 @@ pipeline {
                     "-Dsonar.java.binaries=target/classes"
                     sleep 10
                 }
+                */
             }
         }
 
         stage ('Quality Gate') {
             steps {
-              timeout(time: 5, unit: 'MINUTES') {
+                sh '''
+                    echo "Quality Gate"
+                '''
+              /*timeout(time: 5, unit: 'MINUTES') {
                 waitForQualityGate abortPipeline: true
-              }
+              }*/
             }
         }
 
@@ -66,8 +74,9 @@ pipeline {
 
         stage ('Deploy Container') {
             steps {
-                sh "kubectl apply -f ${WORKSPACE}/deployment.yaml -n ${targetNamespace}"
-                sh "kubectl apply -f ${WORKSPACE}/service.yaml -n ${targetNamespace}"
+                sh "kubectl get pods"
+                /*sh "kubectl apply -f ${WORKSPACE}/deployment.yaml -n ${targetNamespace}"
+                sh "kubectl apply -f ${WORKSPACE}/service.yaml -n ${targetNamespace}"*/
             }
         }
 
