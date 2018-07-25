@@ -6,7 +6,7 @@ pipeline {
     }
     environment{
         sonarqubeURL="http://localhost:9000"
-        newVersion="1.0.0-${env.BUILD_NUMBER}-SNAPSHOT"
+        newVersion="1.0.0-${env.BUILD_NUMBER}"
         appName="log4j2-demo"
         targetNamespace="default"
     }
@@ -37,7 +37,8 @@ pipeline {
         stage ('Build Image And Public to Docker Hub') {
             steps {
                 sh '''
-                    ls ${WORKSPACE}
+                    ls ${WORKSPACE}/target/
+                    cp ${WORKSPACE}/target/${appName}-0.0.1-SNAPSHOT.jar ./${appName}-${newVersion}.jar
                     ls ${WORKSPACE}/target/
                     cp ${WORKSPACE}/target/${appName}-${newVersion}.jar .
                 '''
