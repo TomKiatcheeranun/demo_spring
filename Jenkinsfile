@@ -53,7 +53,7 @@ pipeline {
         stage ('Quality Gate') {
             steps {
                 sh '''
-                    echo "Quality Gate"
+                    echo "Quality Gate !!"
                 '''
               /*timeout(time: 5, unit: 'MINUTES') {
                 waitForQualityGate abortPipeline: true
