@@ -6,7 +6,7 @@ pipeline {
     }
     environment{
         sonarqubeURL="http://localhost:9000"
-        newVersion="1.0.0-${env.BUILD_NUMBER}"
+        newVersion="1.0.0-${env.BUILD_NUMBER}-SNAPSHOT"
         appName="log4j2-demo"
         targetNamespace="default"
     }
@@ -31,17 +31,6 @@ pipeline {
                     echo "Build with Sonarqube"
                     mvn package
                 '''
-            }
-        }
-
-        stage ('Quality Gate') {
-            steps {
-                sh '''
-                    echo "Quality Gate !!"
-                '''
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
             }
         }
 
