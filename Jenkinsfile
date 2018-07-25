@@ -29,23 +29,8 @@ pipeline {
             steps {
                 sh '''
                     echo "Build with Sonarqube"
+                    mvn package
                 '''
-
-                withSonarQubeEnv('sonarqube') {
-                    sh "mvn versions:set -DnewVersion=${newVersion}"
-                    sh "mvn clean package sonar:sonar " +
-                    "-Dsonar.host.url=${sonarqubeURL} " +
-                    "-Dsonar.projectKey=${appName} " +
-                    "-Dsonar.projectName=${appName} " +
-                    "-Dsonar.projectVersion=${newVersion} " +
-                    "-Dsonar.language=java " +
-                    "-Dsonar.sources=src/ "+
-                    "-Dsonar.tests=src/test/ "+
-                    "-Dsonar.test.inclusions=**/*Test*/** "+
-                    "-Dsonar.exclusions=**/*Test*/** "+
-                    "-Dsonar.java.binaries=target/classes"
-                    sleep 10
-                }
             }
         }
 
