@@ -48,17 +48,14 @@ pipeline {
             }
         }*/
 
-        stage('Build image') {
+        stage ('Build Image And Public to Docker Hub') {
             steps {
-                app = docker.build("birdyman/${appName}:${newVersion}")
-            }
-        }
-        stage('Push image') {
-            steps {
-                docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                    app.push("${env.BUILD_NUMBER}")
-                    app.push("latest")
-                }
+                sh '''
+                    ls ${WORKSPACE}/target/
+                    cp ${WORKSPACE}/target/${appName}-0.0.1-SNAPSHOT.jar ${WORKSPACE}/target/${appName}-${newVersion}.jar
+                    docker build -t birdyman/${appName}:${newVersion} .
+                    docker push birdyman/${appName}:${newVersion}
+                '''
             }
         }
 
