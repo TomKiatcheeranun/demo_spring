@@ -9,6 +9,7 @@ pipeline {
         newVersion="1.0.0-${env.BUILD_NUMBER}"
         appName="log4j2-demo"
         targetNamespace="cloudtalk-demo"
+        host="demo-cloudtalk.tidc-cloudtalk.com"
     }
     stages {
         stage ('Initialize') {
@@ -58,6 +59,7 @@ pipeline {
                     sed -i s/#APP_NAME#/${appName}/g deployment-${appName}-${newVersion}.yaml
                     sed -i s/#APP_VERSION#/${newVersion}/g deployment-${appName}-${newVersion}.yaml
                     sed -i s/#NAMESPACE#/${targetNamespace}/g deployment-${appName}-${newVersion}.yaml
+                    sed -i s/#HOST#/${host}/g deployment-${appName}-${newVersion}.yaml
                     kubectl apply -f deployment-${appName}-${newVersion}.yaml
                     cat deployment-${appName}-${newVersion}.yaml
                 '''
