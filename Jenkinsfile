@@ -5,7 +5,6 @@ pipeline {
         jdk 'jdk8'
     }
     environment{
-        sonarqubeURL="http://localhost:9000"
         newVersion="1.0.0-${env.BUILD_NUMBER}"
         appName="log4j2-demo"
         targetNamespace="cloudtalk-demo"
