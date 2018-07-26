@@ -42,8 +42,8 @@ pipeline {
                 '''
                 withCredentials([usernamePassword(credentialsId: 'birdy-hub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUsername')]) {
                     sh '''docker login -u ${dockerhubUsername} -p ${dockerhubPassword}'''
-                    sh '''docker build -t birdy/${appName}:${newVersion} .'''
-                    sh '''docker push birdy/${appName}:${newVersion}'''
+                    sh '''docker build -t birdyman/${appName}:${newVersion} .'''
+                    sh '''docker push birdyman/${appName}:${newVersion}'''
                 }
             }
         }
