@@ -48,11 +48,18 @@ pipeline {
                 }
             }
         }
+
+        stage ('Security test step') {
+            steps {
+                sh '''
+                    echo "Security test step"
+                '''
+            }
+        }
+
         stage ('Deploy Container') {
             steps {
                 sh "kubectl get pods"
-                /*sh "kubectl apply -f ${WORKSPACE}/deployment.yaml -n ${targetNamespace}"
-                sh "kubectl apply -f ${WORKSPACE}/service.yaml -n ${targetNamespace}"*/
                 sh '''
                     cp deployment.yaml deployment-${appName}-${newVersion}.yaml
                     sed -i s/#APP_NAME#/${appName}/g deployment-${appName}-${newVersion}.yaml
