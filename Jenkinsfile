@@ -59,6 +59,7 @@ pipeline {
                     sed -i s/#APP_VERSION#/${newVersion}/g deployment-${appName}-${newVersion}.yaml
                     sed -i s/#NAMESPACE#/${targetNamespace}/g deployment-${appName}-${newVersion}.yaml
                     kubectl apply -f deployment-${appName}-${newVersion}.yaml
+                    cat deployment-${appName}-${newVersion}.yaml
                 '''
             }
         }
