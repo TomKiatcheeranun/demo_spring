@@ -54,7 +54,6 @@ pipeline {
                 /*sh "kubectl apply -f ${WORKSPACE}/deployment.yaml -n ${targetNamespace}"
                 sh "kubectl apply -f ${WORKSPACE}/service.yaml -n ${targetNamespace}"*/
                 sh '''
-                    cd src/${appPath}
                     cp deployment.yaml deployment-${appName}.yaml
                     sed -i s/#APP_NAME#/${appName}/g deployment-${appName}-${newVersion}.yaml
                     sed -i s/#APP_VERSION#/${newVersion}/g deployment-${appName}-${newVersion}.yaml
