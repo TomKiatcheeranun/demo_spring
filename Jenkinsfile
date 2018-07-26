@@ -8,7 +8,7 @@ pipeline {
         sonarqubeURL="http://localhost:9000"
         newVersion="1.0.0-${env.BUILD_NUMBER}"
         appName="log4j2-demo"
-        targetNamespace="default"
+        targetNamespace="cloudtalk-demo"
     }
     stages {
         stage ('Initialize') {
@@ -44,27 +44,23 @@ pipeline {
                     sh '''docker login -u ${dockerhubUsername} -p ${dockerhubPassword}'''
                     sh '''docker build -t birdyman/${appName}:${newVersion} .'''
                     sh '''docker push birdyman/${appName}:${newVersion}'''
+                    sh '''docker image remove birdyman/${appName}:${newVersion}'''
                 }
             }
         }
-
-        /*stage ('Build Image And Public to Docker Hub') {
-            steps {
-                sh '''
-                    ls ${WORKSPACE}/target/
-                    cp ${WORKSPACE}/target/${appName}-0.0.1-SNAPSHOT.jar ${WORKSPACE}/target/${appName}-${newVersion}.jar
-                    docker login -u birdyman -p Bird1Bird
-                    docker build -t birdy/${appName}:${newVersion} .
-                    docker push birdy/${appName}:${newVersion}
-                '''
-            }
-        }*/
-
         stage ('Deploy Container') {
             steps {
                 sh "kubectl get pods"
                 /*sh "kubectl apply -f ${WORKSPACE}/deployment.yaml -n ${targetNamespace}"
                 sh "kubectl apply -f ${WORKSPACE}/service.yaml -n ${targetNamespace}"*/
+                sh '''
+                    cd src/${appPath}
+                    cp deployment.yaml deployment-${appName}.yaml
+                    sed -i s/#APP_NAME#/${appName}/g deployment-${appName}-${newVersion}.yaml
+                    sed -i s/#APP_VERSION#/${newVersion}/g deployment-${appName}-${newVersion}.yaml
+                    sed -i s/#NAMESPACE#/${targetNamespace}/g deployment-${appName}-${newVersion}.yaml
+                    kubectl apply -f deployment-${appName}-${newVersion}.yaml
+                '''
             }
         }
 
